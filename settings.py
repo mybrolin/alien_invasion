@@ -21,3 +21,4 @@ class Settings:
         self.bullet_width = 3  # 子弹宽
         self.bullet_hight = 15  # 子弹高
         self.bullet_color = (60, 60, 60)  # 子弹颜色
+        self.bullets_allowed = 3  # 同时生成的子弹最大数量

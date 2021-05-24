@@ -7,6 +7,7 @@ import pygame
 
 from settings import Settings
 from ship import Ship
+from bullet import Bullet
 
 
 class AlienInvasion:
@@ -25,7 +26,9 @@ class AlienInvasion:
                                                    self.settings.screen_height))  # 创建一个显示窗口 参数是个元组，表示宽1200像素，高800像素 给到screen的是个Surface，是游戏元素
         pygame.display.set_caption("Alien Invasion")
 
-        self.ship = Ship(self)
+        # 屏幕上的元素
+        self.ship = Ship(self)  # 飞船
+        self.bullets = pygame.sprite.Group()  # 子弹
 
     def _check_keyup_event(self, event):
         """键盘弹起事件 将移动标志都置为false，不再移动"""
@@ -51,8 +54,30 @@ class AlienInvasion:
             self.ship.move_up = True
         elif event.key == pygame.K_DOWN:
             self.ship.move_down = True
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()
         elif event.key == pygame.K_q:
             sys.exit()
+
+    def _update_bullets(self):
+        """更新子弹信息"""
+        # 子弹实时更新
+        self.bullets.update()
+        # 销毁屏幕外的子弹
+        self._destory_bullet()
+
+    def _fire_bullet(self):
+        """发射子弹 在允许最大子弹数的范围内创建"""
+        if len(self.bullets) < self.settings.bullets_allowed:
+            self.bullets.add(Bullet(self))
+
+    def _destory_bullet(self):
+        """消除屏幕外的子弹"""
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+
+        # print(len(self.bullets))
 
     def _check_events(self):
         """监视键盘和鼠标事件"""
@@ -69,15 +94,25 @@ class AlienInvasion:
         """每次循环都重缓屏幕"""
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()  # 画船
+        # 画出所有子弹
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
 
         # 让最近绘制的屏幕可见
         pygame.display.flip()
 
     def run_game(self):
-        """开始游戏主循环"""
+        """
+        开始游戏主循环
+        """
         while True:
+            # 键盘输入反馈
             self._check_events()
+            # 飞船实时更新
             self.ship.update()
+            # 子弹处理
+            self._update_bullets()
+            # 屏幕显示
             self._update_screen()
 
 
