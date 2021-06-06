@@ -40,9 +40,18 @@ def _check_bullet_alien_collisions(ai_game):
         ai_game.gameStatus.shut_down()
 
     # 一波外星人来袭制止，制造下一波
+    setting = Settings()
     if not ai_game.aliens and ai_game.settings.alien_reset_times > 0:
         part_reset_game(ai_game)
         ai_game.settings.alien_reset_times -= 1
+
+        # 提升等级
+        ai_game.settings.alien_x_speen = setting.alien_x_speen * (
+                1 + setting.alien_reset_times - ai_game.settings.alien_reset_times)
+        ai_game.settings.ship_speed = setting.ship_speed * (
+                1 + setting.alien_reset_times - ai_game.settings.alien_reset_times)
+        ai_game.settings.bullet_speed = setting.bullet_speed * (
+                1 + setting.alien_reset_times - ai_game.settings.alien_reset_times)
 
 
 def _fire_bullet(ai_game):
@@ -140,6 +149,9 @@ def reset_game(ai_game):
 
     settings = Settings()
     ai_game.settings.alien_reset_times = settings.alien_reset_times  # 外星人重置次数还原
+    ai_game.settings.alien_x_speen = settings.alien_x_speen
+    ai_game.settings.ship_speed = settings.ship_speed
+    ai_game.settings.bullet_speed = settings.bullet_speed
 
 
 def _ship_hit(ai_game):

@@ -11,15 +11,15 @@ class Settings:
         self.screen_width = 1200  # 窗口宽像素
         self.screen_height = 800  # 窗口高像素
         self.bg_color = (230, 230, 230)  # 背景色
-        self.full_screen = False  # 是否全屏
+        self.full_screen = True  # 是否全屏
 
         # 飞船所须参数
-        self.ship_speed = 1.5  # 飞船每次移动的像素
+        self.ship_speed = 3  # 飞船每次移动的像素
         self.ship_life = 3  # 飞船一共几艘
 
         # 子弹设置
-        self.bullet_speed = 1.0  # 子弹速度
-        self.bullet_width = 1000  # 子弹宽
+        self.bullet_speed = 5  # 子弹速度
+        self.bullet_width = 5  # 子弹宽
         self.bullet_hight = 10  # 子弹高
         self.bullet_color = (60, 60, 60)  # 子弹颜色
         self.bullets_allowed = 5  # 同时生成的子弹最大数量
@@ -27,11 +27,11 @@ class Settings:
 
         # 外星人设置
         self.alien_x_speen = 1.0  # 外星人移动速度
-        self.alien_y_speen = 10.0  # 外星人移动速度
-        self.alien_left_rows = 1  # 保留多少行空白
+        self.alien_y_speen = 5.0  # 外星人移动速度
+        self.alien_left_rows = 2  # 保留多少行空白
         # self.alien_change_direct_step = 10  # 移动10步后换方向
         self.alien_move_direct = 1  # 外星人移动方向 1向右-1向左
-        self.alien_reset_times = 1  # 外星人重置次数
+        self.alien_reset_times = 5  # 外星人重置次数
         self.alien_score_for_one = 50  # 一个外星人的积分
 
         # 按钮
