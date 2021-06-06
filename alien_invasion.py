@@ -5,7 +5,8 @@ import pygame
 import game_function
 from settings import Settings
 from ship import Ship
-from alien import Alien
+from button import Button
+from gameStatus import GameStatus
 
 
 class AlienInvasion:
@@ -30,6 +31,10 @@ class AlienInvasion:
         self.ship = Ship(self)  # 飞船
         self.bullets = pygame.sprite.Group()  # 子弹
         self.aliens = pygame.sprite.Group()  # 外星人
+        self.play_button = Button(self, "Play")
+
+        # 游戏状态控制
+        self.gameStatus = GameStatus(self)
 
         # 创建外星人
         game_function.create_fleet(self)
@@ -41,12 +46,14 @@ class AlienInvasion:
         while True:
             # 键盘输入反馈
             game_function.check_events(self)
-            # 飞船实时更新
-            self.ship.update()
-            # 子弹处理
-            game_function.update_bullets(self)
-            # 外星人处理
-            game_function.update_aliens(self)
+
+            if self.gameStatus.is_alive():
+                # 飞船实时更新
+                self.ship.update()
+                # 子弹处理
+                game_function.update_bullets(self)
+                # 外星人处理
+                game_function.update_aliens(self)
             # 屏幕显示
             game_function.update_screen(self)
 

@@ -61,6 +61,10 @@ class Ship:
         self.rect.x = self.x
         self.rect.y = self.y
 
+    def back_center(self):
+        """恢复到中心位置"""
+        self.rect.midbottom = self.screen_rect.midbottom
+
     def blitme(self):
         """在指定位置绘制飞船"""
         self.screen.blit(self.image, self.rect)
