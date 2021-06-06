@@ -30,7 +30,7 @@ def _check_bullet_alien_collisions(ai_game):
     """
     collisions = pygame.sprite.groupcollide(ai_game.bullets, ai_game.aliens, not ai_game.settings.bullets_super, True)
 
-    log.info(collisions.values())
+    #log.info(collisions.values())
     # 记分
     for aliens in collisions.values():
         ai_game.gameStatus.hit_aliens(len(aliens))
@@ -190,6 +190,7 @@ def _check_keydown_event(ai_game, event):
     elif event.key == pygame.K_SPACE:
         _fire_bullet(ai_game)
     elif event.key == pygame.K_q:
+        ai_game.gameStatus.save_max_score()
         sys.exit()
 
 
@@ -205,6 +206,7 @@ def check_events(ai_game):
     """监视键盘和鼠标事件"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            ai_game.gameStatus.save_max_score()
             sys.exit()
         elif event.type == pygame.KEYDOWN:
             _check_keydown_event(ai_game, event)

@@ -1,3 +1,9 @@
+import shelve
+import traceback
+
+import log
+
+
 class GameStatus:
     """游戏状态"""
 
@@ -11,6 +17,7 @@ class GameStatus:
         # self.ship_left = self.initial_ship_life
         # self.current_score = 0
         self.max_score = 0
+        self.load_max_score()
 
         self.initial_status()
 
@@ -32,6 +39,25 @@ class GameStatus:
 
         self.current_score = 0
         # self.max_score = 0
+
+    def save_max_score(self):
+        """保存最高记录"""
+        maxScoreHistory = shelve.open("maxScoreHistory")
+        maxScoreHistory["maxScore"] = self.max_score
+        maxScoreHistory.close()
+
+    def load_max_score(self):
+        """加载最高记录"""
+        maxScoreHistory = shelve.open("maxScoreHistory")
+        try:
+            temp_max_score = maxScoreHistory["maxScore"]
+            if temp_max_score:
+                self.max_score = temp_max_score
+        except Exception as ex:
+            log.error(traceback.extract_stack())
+            maxScoreHistory["maxScore"] = 0
+
+        maxScoreHistory.close()
 
     def ship_minus(self):
         """飞船生命减一"""
