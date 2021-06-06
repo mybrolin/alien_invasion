@@ -3,9 +3,12 @@
 #
 import pygame
 import sys
+import time
 
 from bullet import Bullet
 from alien import Alien
+import log
+from settings import Settings
 
 
 def update_bullets(ai_game):
@@ -27,12 +30,19 @@ def _check_bullet_alien_collisions(ai_game):
     """
     collisions = pygame.sprite.groupcollide(ai_game.bullets, ai_game.aliens, not ai_game.settings.bullets_super, True)
 
-    if not ai_game.aliens and ai_game.settings.alien_reset_times >= 1:
-        ai_game.aliens.empty()
-        create_fleet(ai_game)
-        ai_game.settings.alien_reset_times -= 1
+    log.info(collisions.values())
+    # 记分
+    for aliens in collisions.values():
+        ai_game.gameStatus.hit_aliens(len(aliens))
+
+    # 外星人都打光了，结束游戏
     if not ai_game.aliens and ai_game.settings.alien_reset_times == 0:
         ai_game.gameStatus.shut_down()
+
+    # 一波外星人来袭制止，制造下一波
+    if not ai_game.aliens and ai_game.settings.alien_reset_times > 0:
+        part_reset_game(ai_game)
+        ai_game.settings.alien_reset_times -= 1
 
 
 def _fire_bullet(ai_game):
@@ -113,20 +123,31 @@ def update_aliens(ai_game):
             break
 
 
-def reset_game(ai_game):
-    """游戏重置"""
-    ai_game.gameStatus.active()  # 激活
-
+def part_reset_game(ai_game):
+    """飞船撞击重置，游戏不结束"""
     ai_game.ship.back_center()  # 船复位
     ai_game.bullets.empty()  # 子弹清空
     ai_game.aliens.empty()  # 外星人清空
     create_fleet(ai_game)  # 重画外星人
+
+
+def reset_game(ai_game):
+    """游戏重置"""
+    ai_game.gameStatus.active()  # 激活
+
+    part_reset_game(ai_game)
     ai_game.gameStatus.initial_status()  # 状态参数复位
+
+    settings = Settings()
+    ai_game.settings.alien_reset_times = settings.alien_reset_times  # 外星人重置次数还原
 
 
 def _ship_hit(ai_game):
     """飞船撞击事件"""
     ai_game.gameStatus.ship_minus()
+    if ai_game.gameStatus.is_alive():  # 如果还有命
+        part_reset_game(ai_game)
+        time.sleep(1)
 
 
 def _check_keyup_event(ai_game, event):
@@ -183,7 +204,7 @@ def check_events(ai_game):
 
 
 def update_screen(ai_game):
-    """每次循环都重缓屏幕"""
+    """每次循环都重画屏幕"""
     ai_game.screen.fill(ai_game.settings.bg_color)
     ai_game.ship.blitme()  # 画船
     # 画出所有子弹
@@ -191,6 +212,9 @@ def update_screen(ai_game):
         bullet.draw_bullet()
     # 画外星人
     ai_game.aliens.draw(ai_game.screen)
+
+    # 绘制记分板
+    ai_game.dashBoard.show_dash_board()
 
     # 画播放按钮
     if not ai_game.gameStatus.is_alive():

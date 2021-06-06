@@ -10,7 +10,7 @@ class GameStatus:
 
         # self.ship_left = self.initial_ship_life
         # self.current_score = 0
-        # self.max_score = 0
+        self.max_score = 0
 
         self.initial_status()
 

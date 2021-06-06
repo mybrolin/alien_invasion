@@ -7,6 +7,7 @@ from settings import Settings
 from ship import Ship
 from button import Button
 from gameStatus import GameStatus
+from dashBoard import DashBoard
 
 
 class AlienInvasion:
@@ -31,13 +32,14 @@ class AlienInvasion:
         self.ship = Ship(self)  # 飞船
         self.bullets = pygame.sprite.Group()  # 子弹
         self.aliens = pygame.sprite.Group()  # 外星人
-        self.play_button = Button(self, "Play")
+        self.play_button = Button(self, "GO!")
 
         # 游戏状态控制
         self.gameStatus = GameStatus(self)
 
-        # 创建外星人
-        game_function.create_fleet(self)
+        # 记分板
+        self.dashBoard = DashBoard(self)
+
 
     def run_game(self):
         """

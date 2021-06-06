@@ -9,6 +9,7 @@ class Ship:
 
     def __init__(self, ai_game):
         """初始化飞般并设置其初始位置"""
+
         self.screen = ai_game.screen  # 屏幕 Surface
         self.screen_rect = ai_game.screen.get_rect()
 
@@ -63,7 +64,10 @@ class Ship:
 
     def back_center(self):
         """恢复到中心位置"""
-        self.rect.midbottom = self.screen_rect.midbottom
+        self.rect.center = self.screen_rect.center
+        self.x = self.rect.x
+        self.rect.bottom = self.screen_rect.bottom
+        self.y = self.rect.y
 
     def blitme(self):
         """在指定位置绘制飞船"""
