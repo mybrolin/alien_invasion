@@ -6,7 +6,7 @@ setting = Settings()
 logging.basicConfig(filename=setting.logFileName, level=logging.INFO,
                     format="%(asctime)s %(levelname)s : %(message)s")
 
-logging.disable(logging.CRITICAL)
+logging.disable(logging.INFO)
 
 
 def info(message):
